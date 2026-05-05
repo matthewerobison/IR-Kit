@@ -1,34 +1,77 @@
 # IR-Kit
 
-IR-Kit is a lightweight incident response triage toolkit built for small and medium businesses and MSPs.
+IR-Kit is a lightweight PowerShell incident response triage toolkit for SMBs and MSPs.
 
-## Purpose
-Provide fast, actionable endpoint triage that can be executed remotely with minimal overhead.
+## Architecture
 
-## Key Principles
-- Simple to run
-- No heavy dependencies
-- Actionable output (not just raw data)
-- Designed for real-world incidents
+IR-Kit is split into two major parts:
 
-## MVP Direction
-- PowerShell-based CLI
-- Modular collectors
-- Structured outputs (JSON + text)
-- Basic detection logic
+- `Collector`: runs on remote endpoints through RMM or remote execution and only collects and normalizes evidence
+- `Analyzer`: runs later on the analyst workstation and will handle detection, correlation, and reporting
 
-## Example Usage
-```powershell
-.\src\IR-Kit.ps1 -Mode Triage -Case phishing -OutputDir C:\IR-Kit\Cases\Case-001
-```
+The analyzer side is only a placeholder right now. No detection logic is implemented yet.
 
-## Repo Structure (Planned)
-```
+## Project Structure
+
+```text
 src/
-  modules/
-  detections/
-docs/
+  collector/
+    Invoke-IRKitCollector.ps1
+    modules/
+      Get-IRProcesses.ps1
+      Get-IRNetConnections.ps1
+  analyzer/
+    Invoke-IRKitAnalyzer.ps1
+    modules/
+    rules/
+  IR-Kit.ps1
 ```
 
-## Status
-🚧 Initial scaffolding phase
+## Collector Usage
+
+Preferred entry point:
+
+```powershell
+.\src\collector\Invoke-IRKitCollector.ps1 -CaseName phishing -OutputDir C:\IR-Kit\Cases
+```
+
+Select specific modules:
+
+```powershell
+.\src\collector\Invoke-IRKitCollector.ps1 -CaseName phishing -OutputDir C:\IR-Kit\Cases -Modules Processes,Network
+```
+
+Backwards-compatible wrapper:
+
+```powershell
+.\src\IR-Kit.ps1 -Case phishing -OutputDir C:\IR-Kit\Cases
+```
+
+## Analyzer Placeholder Usage
+
+```powershell
+.\src\analyzer\Invoke-IRKitAnalyzer.ps1 -CasePath C:\IR-Kit\Cases\phishing_20260504_220000
+```
+
+## Output Structure
+
+```text
+OutputDir/
+  CaseName_timestamp/
+    collection_manifest.json
+    Processes/
+      processes.json
+      processes.csv
+      process_tree.txt
+    Network/
+      network_connections.json
+      network_connections.csv
+      network_connections.txt
+      network_connections_established.txt
+```
+
+## Notes
+
+- Collector modules are responsible for creating their own artifact subfolders
+- Artifacts are written as structured JSON and CSV first, with responder-friendly text outputs alongside them
+- The analyzer placeholder validates the case path and does not modify case data

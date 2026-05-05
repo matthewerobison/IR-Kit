@@ -146,15 +146,16 @@ function Get-IRProcesses {
     )
 
     $moduleName = "Get-IRProcesses"
+    $moduleOutputDir = Join-Path $OutputDir "Processes"
     $outputFiles = @(
-        (Join-Path $OutputDir "processes.json"),
-        (Join-Path $OutputDir "processes.csv"),
-        (Join-Path $OutputDir "process_tree.txt")
+        (Join-Path $moduleOutputDir "processes.json"),
+        (Join-Path $moduleOutputDir "processes.csv"),
+        (Join-Path $moduleOutputDir "process_tree.txt")
     )
 
     try {
-        if (-not (Test-Path -LiteralPath $OutputDir)) {
-            New-Item -ItemType Directory -Path $OutputDir -Force -ErrorAction Stop | Out-Null
+        if (-not (Test-Path -LiteralPath $moduleOutputDir)) {
+            New-Item -ItemType Directory -Path $moduleOutputDir -Force -ErrorAction Stop | Out-Null
         }
 
         try {
@@ -210,7 +211,7 @@ function Get-IRProcesses {
         [PSCustomObject]@{
             ModuleName      = $moduleName
             Success         = $true
-            OutputDirectory = $OutputDir
+            OutputDirectory = $moduleOutputDir
             OutputFiles     = $outputFiles
             ProcessCount    = $processes.Count
             Error           = $null
@@ -223,7 +224,7 @@ function Get-IRProcesses {
         [PSCustomObject]@{
             ModuleName      = $moduleName
             Success         = $false
-            OutputDirectory = $OutputDir
+            OutputDirectory = $moduleOutputDir
             OutputFiles     = $outputFiles
             ProcessCount    = 0
             Error           = $message

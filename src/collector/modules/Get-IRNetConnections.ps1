@@ -104,11 +104,12 @@ function Get-IRNetConnections {
     )
 
     $moduleName = "Get-IRNetConnections"
+    $moduleOutputDir = Join-Path $OutputDir "Network"
     $outputFiles = @(
-        (Join-Path $OutputDir "network_connections.json"),
-        (Join-Path $OutputDir "network_connections.csv"),
-        (Join-Path $OutputDir "network_connections.txt"),
-        (Join-Path $OutputDir "network_connections_established.txt")
+        (Join-Path $moduleOutputDir "network_connections.json"),
+        (Join-Path $moduleOutputDir "network_connections.csv"),
+        (Join-Path $moduleOutputDir "network_connections.txt"),
+        (Join-Path $moduleOutputDir "network_connections_established.txt")
     )
 
     $errors = New-Object System.Collections.Generic.List[string]
@@ -117,8 +118,8 @@ function Get-IRNetConnections {
     $udpCount = 0
 
     try {
-        if (-not (Test-Path -LiteralPath $OutputDir)) {
-            New-Item -ItemType Directory -Path $OutputDir -Force -ErrorAction Stop | Out-Null
+        if (-not (Test-Path -LiteralPath $moduleOutputDir)) {
+            New-Item -ItemType Directory -Path $moduleOutputDir -Force -ErrorAction Stop | Out-Null
         }
 
         $processLookup = Get-IRNetworkProcessLookup
@@ -197,7 +198,7 @@ function Get-IRNetConnections {
         [PSCustomObject]@{
             ModuleName      = $moduleName
             Success         = ($tcpCount -gt 0 -or $udpCount -gt 0 -or $errors.Count -eq 0)
-            OutputDirectory = $OutputDir
+            OutputDirectory = $moduleOutputDir
             OutputFiles     = $outputFiles
             ConnectionCount = $records.Count
             TcpCount        = $tcpCount
@@ -213,7 +214,7 @@ function Get-IRNetConnections {
         [PSCustomObject]@{
             ModuleName      = $moduleName
             Success         = $false
-            OutputDirectory = $OutputDir
+            OutputDirectory = $moduleOutputDir
             OutputFiles     = $outputFiles
             ConnectionCount = 0
             TcpCount        = 0
