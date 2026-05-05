@@ -2,7 +2,7 @@ param(
     [string]$Mode = "Triage",
     [string]$Case = "default",
     [string]$OutputDir = ".\output",
-    [string[]]$Modules = @("Processes", "Network")
+    [string[]]$Modules = @("Processes", "Network", "Services", "ScheduledTasks", "Prefetch", "DnsCache", "Autoruns", "EventLogs")
 )
 
 # Backwards compatibility wrapper. Prefer src\collector\Invoke-IRKitCollector.ps1.

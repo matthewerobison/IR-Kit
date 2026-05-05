@@ -1,7 +1,7 @@
 param(
     [string]$CaseName = "default",
     [string]$OutputDir = ".\output",
-    [string[]]$Modules = @("Processes", "Network")
+    [string[]]$Modules = @("Processes", "Network", "Services", "ScheduledTasks", "Prefetch", "DnsCache", "Autoruns", "EventLogs")
 )
 
 $moduleDefinitions = @{
@@ -12,6 +12,30 @@ $moduleDefinitions = @{
     Network = @{
         ScriptPath   = Join-Path $PSScriptRoot "modules\Get-IRNetConnections.ps1"
         FunctionName = "Get-IRNetConnections"
+    }
+    Services = @{
+        ScriptPath   = Join-Path $PSScriptRoot "modules\Get-IRServices.ps1"
+        FunctionName = "Get-IRServices"
+    }
+    ScheduledTasks = @{
+        ScriptPath   = Join-Path $PSScriptRoot "modules\Get-IRScheduledTasks.ps1"
+        FunctionName = "Get-IRScheduledTasks"
+    }
+    Prefetch = @{
+        ScriptPath   = Join-Path $PSScriptRoot "modules\Get-IRPrefetch.ps1"
+        FunctionName = "Get-IRPrefetch"
+    }
+    DnsCache = @{
+        ScriptPath   = Join-Path $PSScriptRoot "modules\Get-IRDnsCache.ps1"
+        FunctionName = "Get-IRDnsCache"
+    }
+    Autoruns = @{
+        ScriptPath   = Join-Path $PSScriptRoot "modules\Get-IRAutoruns.ps1"
+        FunctionName = "Get-IRAutoruns"
+    }
+    EventLogs = @{
+        ScriptPath   = Join-Path $PSScriptRoot "modules\Get-IREventLogs.ps1"
+        FunctionName = "Get-IREventLogs"
     }
 }
 
