@@ -17,7 +17,11 @@ Write-Host "[IR-Kit] Output Directory: $caseDir"
 . "$PSScriptRoot\\modules\\Get-IRProcesses.ps1"
 . "$PSScriptRoot\\modules\\Get-IRNetConnections.ps1"
 
-Get-IRProcesses -OutputDir $caseDir
+$processResult = Get-IRProcesses -OutputDir $caseDir
 Get-IRNetConnections -OutputDir $caseDir
+
+if (-not $processResult.Success) {
+    Write-Warning "[IR-Kit] Process collection reported an error: $($processResult.Error)"
+}
 
 Write-Host "[IR-Kit] Complete" -ForegroundColor Green
